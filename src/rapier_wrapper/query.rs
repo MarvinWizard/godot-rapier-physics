@@ -908,6 +908,9 @@ impl PhysicsEngine {
                 }
             }
         }
+        // Callers apply contacts in slice order, and broadphase traversal order is not
+        // stable across a restored world, so return candidates in canonical handle order.
+        hit_info_slice[..cpt_hit].sort_unstable_by_key(|hit| hit.collider.into_raw_parts());
         cpt_hit
     }
 
